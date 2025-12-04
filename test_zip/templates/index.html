@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Emotive Toshi AI 💖</title>
+    <style>
+        body { font-family: "Segoe UI", sans-serif; text-align: center; margin-top: 50px; background: #fffafc; }
+        #toshi-img { width: 220px; border-radius: 10px; }
+        #chat { margin-top: 20px; }
+        button { margin: 8px; padding: 10px 20px; border: none; border-radius: 6px; background: #ffb6c1; color: white; font-size: 16px; cursor: pointer; }
+        button:hover { background: #ff91a4; }
+    </style>
+</head>
+<body>
+    <h1>Emotive Toshi AI 💕</h1>
+   <img id="toshi-img" src="/static/toshi-cat.png" width="200">
+
+    <div>
+        <input id="usd-input" type="number" placeholder="Enter USD amount" />
+        <button onclick="convert()">Convert</button>
+        <button id="toshi-btn" onclick="toggleToshiMode()">Toshi Mode Off</button>
+    </div>
+    <div id="chat"></div>
+    <audio id="toshi-voice" autoplay></audio>
+
+<script>
+let toshiMode = false;
+
+function toggleToshiMode() {
+    fetch("/api/toshi_mode", { method: "POST" })
+        .then(r => r.json())
+        .then(data => {
+            toshiMode = data.toshi_mode;
+            document.getElementById("toshi-btn").innerText = toshiMode ? "Toshi Mode On" : "Toshi Mode Off";
+        })
+        .catch(err => console.error("Toggle error:", err));
+}
+
+async function convert() {
+    const amount = parseFloat(document.getElementById("usd-input").value);
+    if (!amount) return alert("Enter a USD amount");
+
+    try {
+        const res = await fetch("/api/convert", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ amount, toshi_mode: toshiMode })
+        });
+        const data = await res.json();
+        document.getElementById("chat").innerHTML = `
+            <p>USD→JPY: ${data.usd_to_jpy.toFixed(2)}</p>
+            <p>Toshi price: $${data.toshi_price}</p>
+            <p>Converted: ¥${data.jpy.toFixed(2)}</p>
+            <p>🤖 Toshi: ${data.ai_reply}</p>
+        `;
+
+        if (toshiMode) {
+            const ttsRes = await fetch("/api/tts", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ text: data.ai_reply })
+            });
+            const blob = await ttsRes.blob();
+            const audio = document.getElementById("toshi-voice");
+            audio.src = URL.createObjectURL(blob);
+            audio.play();
+        }
+    } catch (err) {
+        console.error("Convert error:", err);
+    }
+}
+
+// Auto-update every 30 s if Toshi Mode is on
+setInterval(() => {
+    if (toshiMode) {
+        console.log("⏱ Auto update running…");
+        convert();
+    }
+}, 30000);
+</script>
+</body>
+</html>
