@@ -81,15 +81,25 @@ def fetch_usd_to_jpy() -> float | None:
         return None
 
 
+_toshi_cache = {"price": None, "timestamp": 0}
+
 def fetch_toshi_price() -> float | None:
     """Fetch live Toshi price in USD from CoinGecko."""
+    global _toshi_cache
+    now = time.time()
     try:
+        if _toshi_cache["price"] and now - _toshi_cache["timestamp"] < 60:
+            return _toshi_cache["price"]
+
         r = requests.get(
             "https://api.coingecko.com/api/v3/simple/price?ids=toshi&vs_currencies=usd",
             timeout=10,
         )
         r.raise_for_status()
-        return r.json()["toshi"]["usd"]
+        price = r.json()["toshi"]["usd"]
+        _toshi_cache["price"] = price
+        _toshi_cache["timestamp"] = now
+        return price
     except Exception as e:
         print("Toshi API error:", e)
         return None
