@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{ city | default("Weather") }} — Weather Demo</title>
+  <link rel="stylesheet" href="/static/styles.css">
+
+  <style>
+    body { margin:0; font-family: sans-serif; color:white; }
+
+    #background-video {
+      position: fixed;
+      right:0;
+      bottom:0;
+      min-width:100%;
+      min-height:100%;
+      width:auto;
+      height:auto;
+      z-index:-1;
+      object-fit: cover;
+    }
+
+    .weather-box { 
+      position: relative; 
+      z-index: 1; 
+      background: rgba(0,0,0,0.5); 
+      padding: 2rem; 
+      margin: 2rem; 
+      border-radius: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+<!-- 👇 Video background with cache busting -->
+<video autoplay muted loop id="background-video">
+    <source id="video-source" src="/static/videos/{{ background }}?v={{ timestamp }}" type="video/mp4">
+</video>
+
+<div class="weather-box">
+  <h1>{{ city }}</h1>
+  <p>🌡 Temp: {{ weather.main.temp_f }}°F</p>
+  <p>🌥 Condition: {{ weather.weather[0].description }}</p>
+  <p>💨 Wind: {{ weather.wind.speed }} mph</p>
+</div>
+
+</body>
+</html>
