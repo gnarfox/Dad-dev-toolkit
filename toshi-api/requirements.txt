@@ -1,0 +1,10 @@
+fastapi
+uvicorn[standard]
+gunicorn
+jinja2
+aiofiles
+python-dotenv
+requests
+openai
+httpx
+python-multipart

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Toshi AI 💖</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+
+<h1>Toshi AI 💗</h1>
+
+<img id="toshi-img" src="/static/toshi-cat.png" width="200">
+<video id="toshi-video" width="220" loop muted autoplay style="display:none;">
+    <source src="/static/toshi-animation.mp4" type="video/mp4">
+</video>
+
+
+<div>
+    <input id="usd-input" type="number" placeholder="Enter USD amount">
+    <button onclick="convert()">Convert</button>
+    <button id="toshi-btn" onclick="toggleToshiMode()">Toshi Mode Off</button>
+</div>
+
+<div id="chat"></div>
+<audio id="toshi-voice" controls autoplay></audio>
+
+<script src="/static/main.js"></script>
+</body>
+</html>
