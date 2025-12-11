@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Weather Dashboard ☀️</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+
+<body class="bg-blue-50 text-gray-900 px-6 py-8">
+
+    <h1 class="text-4xl font-bold text-center mb-4">🌎 Cloudy API v1</h1>
+    <p class="text-center mb-6">Select a city or search for one below.</p>
+
+    <!-- SEARCH BAR -->
+    <form onsubmit="goToCity(event)" class="flex justify-center mb-6">
+        <input id="search-input"
+               type="text"
+               class="border px-4 py-2 rounded-l-md w-64"
+               placeholder="Search for a city...">
+        <button class="bg-blue-600 text-white px-4 py-2 rounded-r-md">Search</button>
+    </form>
+
+    <script>
+    function goToCity(e) {
+        e.preventDefault();
+        const city = document.getElementById("search-input").value.trim();
+        if (city.length > 0) {
+            window.location.href = "/weather/" + encodeURIComponent(city);
+        }
+    }
+    </script>
+
+    <hr class="my-6">
+
+    <h2 class="text-2xl font-semibold mb-4">Popular Destinations</h2>
+
+    <h2>✈️ Choose Your Origin Airport</h2>
+
+<form action="/travel/" method="get" id="origin-form">
+    <select name="origin" id="origin-select">
+        <option value="CVG">Cincinnati (CVG)</option>
+        <option value="CMH">Columbus (CMH)</option>
+        <option value="DAY">Dayton (DAY)</option>
+        <option value="ORD">Chicago O'Hare (ORD)</option>
+        <option value="ATL">Atlanta (ATL)</option>
+        <option value="JFK">New York (JFK)</option>
+    </select>
+
+    <input type="text" name="destination" placeholder="Enter a city (ex: Miami)">
+    <button type="submit">Find Flights</button>
+</form>
+
+<hr>
+
+
+    <!-- CITY GRID -->
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+
+        <a href="/weather/New York" class="city-btn">New York</a>
+        <a href="/weather/Los Angeles" class="city-btn">Los Angeles</a>
+        <a href="/weather/Miami" class="city-btn">Miami</a>
+        <a href="/weather/Chicago" class="city-btn">Chicago</a>
+        <a href="/weather/Honolulu" class="city-btn">Honolulu</a>
+        <a href="/weather/Denver" class="city-btn">Denver</a>
+        <a href="/weather/Seattle" class="city-btn">Seattle</a>
+        <a href="/weather/Austin" class="city-btn">Austin</a>
+        <a href="/weather/Orlando" class="city-btn">Orlando</a>
+        <a href="/weather/Portland" class="city-btn">Portland</a>
+
+    </div>
+
+</body>
+</html>
