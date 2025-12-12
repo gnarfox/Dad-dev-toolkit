@@ -35,17 +35,16 @@ known_cities = [
 # -------------------------------
 def choose_background(condition: str):
     c = condition.lower()
-
     if "clear" in c:
-        return "clear.mp4"
+        return "clear"
     elif "snow" in c or "freezing" in c:
-        return "snowy.mp4"
+        return "snowy"
     elif "rain" in c or "drizzle" in c:
-        return "rainy.mp4"
+        return "rainy"
     elif "cloud" in c or "overcast" in c:
-        return "cloudy.mp4"
-    
-    return "sunny.mp4"  # fallback
+        return "cloudy"
+    return "sunny"
+
 
 
 # -------------------------------
