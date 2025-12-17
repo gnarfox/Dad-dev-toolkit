@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Dad-Dev Toolkit Link Shortener</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 12px 18px;
+            background: #4f46e5;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+        button:hover {
+            background: #4338ca;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            background: #f3f4f6;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Link Shortener</h2>
+
+    <input id="urlInput" type="text" placeholder="Enter a long URL..." />
+
+    <button onclick="shorten()">Shorten URL</button>
+
+    <div id="result" style="display:none;">
+        <p><strong>Short URL:</strong> <a id="shortLink" href="#" target="_blank"></a></p>
+        <button onclick="copyLink()">Copy</button>
+    </div>
+
+   <script>
+    async function shorten() {
+        let url = document.getElementById("urlInput").value.trim();
+
+        if (!url) {
+            alert("Please enter a URL!");
+            return;
+        }
+
+        // Prepend https:// if missing
+        if (!url.startsWith("http://") && !url.startsWith("https://")) {
+            url = "https://" + url;
+        }
+
+        try {
+            const response = await fetch("http://127.0.0.1:8000/shorten", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ url })
+            });
+
+            const data = await response.json();
+
+            const shortUrl = data.short_url;
+
+            document.getElementById("shortLink").href = shortUrl;
+            document.getElementById("shortLink").textContent = shortUrl;
+            document.getElementById("result").style.display = "block";
+        } catch (error) {
+            console.error("Error shortening URL:", error);
+            alert("Failed to shorten URL. Check console for details.");
+        }
+    }
+
+    function copyLink() {
+        const link = document.getElementById("shortLink").textContent;
+        navigator.clipboard.writeText(link);
+        alert("Copied to clipboard!");
+    }
+</script>
+</body>
+</html>
